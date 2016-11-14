@@ -13,8 +13,25 @@ const HTMLRender = new function() {
      */
     this.blocks = []
 
+    this.entered = false
+
     this.container = document.createElement('div')
     this.container.classList.add('clererscroll--container')
+
+    // На мобильных устройствах нам необходимо первый "тык" отфильтровать, так как
+    // он лишь позволяет развернуть панельку и не должен перекидывать человека в другое место
+    this.container.addEventListener('mouseenter', event => {
+        if (this.entered === false) {
+            this.entered = true
+            event.stopPropagation()
+
+            return false
+        }
+    })
+
+    this.container.addEventListener('mouseleave', event => {
+        this.entered = false
+    })
 
     /**
      * Загрузить блоки

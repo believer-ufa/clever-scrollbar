@@ -62,8 +62,25 @@ var HTMLRender = new function () {
      */
     this.blocks = [];
 
+    this.entered = false;
+
     this.container = document.createElement('div');
     this.container.classList.add('clererscroll--container');
+
+    // На мобильных устройствах нам необходимо первый "тык" отфильтровать, так как
+    // он лишь позволяет развернуть панельку и не должен перекидывать человека в другое место
+    this.container.addEventListener('mouseenter', function (event) {
+        if (_this.entered === false) {
+            _this.entered = true;
+            event.stopPropagation();
+
+            return false;
+        }
+    });
+
+    this.container.addEventListener('mouseleave', function (event) {
+        _this.entered = false;
+    });
 
     /**
      * Загрузить блоки
