@@ -1,7 +1,10 @@
 {
   "name": "clever-scrollbar",
+  "description": "Simple sidebar which helps to navigate on web page",
+  "repository": "https://github.com/believer-ufa/clever-scrollbar",
+  "license": "MIT",
   "author": "Roman Akhmadullin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "registry": "npm",
   "jspmPackage": true,
   "main": "clever-scrollbars.js",
