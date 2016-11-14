@@ -1,0 +1,9 @@
+{
+  "name": "clever-scrollbar",
+  "author": "Roman Akhmadullin",
+  "version": "0.1.0",
+  "registry": "npm",
+  "jspmPackage": true,
+  "main": "clever-scrollbars.js",
+  "format": "amd"
+}

@@ -1,0 +1,15 @@
+{
+  "jspm": {
+    "name": "CleverScrollbar",
+    "main": "CleverScrollbar.js",
+    "dependencies": {
+      "css": "github:systemjs/plugin-css@^0.1.32"
+    },
+    "devDependencies": {
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.17"
+    }
+  },
+  "devDependencies": {
+    "jspm": "^0.17.0-beta.32"
+  }
+}
