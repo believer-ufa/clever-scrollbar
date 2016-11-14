@@ -4,7 +4,7 @@
   "repository": "https://github.com/believer-ufa/clever-scrollbar",
   "license": "MIT",
   "author": "Roman Akhmadullin",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "registry": "npm",
   "jspmPackage": true,
   "main": "clever-scrollbar.js",

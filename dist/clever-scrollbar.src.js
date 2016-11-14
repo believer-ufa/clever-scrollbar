@@ -252,6 +252,7 @@ var load = HTMLRender.load;
 var reload = HTMLRender.reload;
 var stop = HTMLRender.stop;
 
+exports['default'] = HTMLRender;
 exports.load = load;
 exports.reload = reload;
 exports.stop = stop;
