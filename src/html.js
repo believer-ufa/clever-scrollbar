@@ -1,5 +1,6 @@
 import getElementPos from './functions/get-element-position'
 import getDocumentHeight from './functions/get-document-height'
+import loadStyles from './functions/styles'
 import './functions/throttle'
 
 /**
@@ -36,7 +37,7 @@ const HTMLRender = new function() {
     /**
      * Загрузить блоки
      */
-    this.load = () => {
+    this.load = (options = undefined) => {
         this.blocks = []
         this.container.innerHTML = ''
 
@@ -54,6 +55,10 @@ const HTMLRender = new function() {
 
             window.addEventListener('scroll', this.determineActiveBlock)
             window.addEventListener('resize', this.setCoords)
+
+            if (options === undefined || options.loadStyles !== false) {
+                loadStyles()
+            }
 
         } else {
             console.log('CleverScroll disabled because nothing content blocks')
@@ -162,8 +167,9 @@ const HTMLRender = new function() {
             }
         })
 
-
-        currentBlock.scroll.classList.add('cleverscroll--block-active')
+        if (currentBlock) {
+            currentBlock.scroll.classList.add('cleverscroll--block-active')
+        }
     }
 
     this.determineActiveBlock = this.determineActiveBlockOriginal.throttle(500)

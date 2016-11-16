@@ -1,5 +1,4 @@
 import './polyfills/nodelist'
-import './styles'
 import html from './html'
 
 var load   = html.load

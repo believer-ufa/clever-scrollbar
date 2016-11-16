@@ -6,12 +6,18 @@ It is not a replacement of Default Browser Scrollbar. It's an addition to it.
 
 Check example on [believer-ufa.github.io/clever-scrollbar/](https://believer-ufa.github.io/clever-scrollbar/)
 
-# Setup
+### Setup
 
 1. Add library script
 
 ```html
 <script src="dist/clever-scrollbar.js"></script>
+```
+
+Or install from NPM as module:
+
+```bash
+npm i clever-scrollbar
 ```
 
 2. Add additional attributes to main sections on you page
@@ -37,9 +43,22 @@ window.addEventListener("load", function() {
 })
 ```
 
+### Options
+
+#### Load default stylesheets?
+
+If you want to prevent loading default styles of library, you can use this approach:
+
+```js
+CleverScrollbar.load({
+  loadStyles : false
+})
+```
+
+
 This is all of you need.
 
-# Additional classes
+### Additional classes
 
 If you need to set some additional classes to one of blocks of sidebar, you can do this with additional attribute:
 
@@ -51,11 +70,11 @@ If you need to set some additional classes to one of blocks of sidebar, you can 
 >...</div>
 ```
 
-# Ajax and SPA applications
+### Ajax and SPA applications
 
 If you webpage content changed withoud full reload, you can use method `CleverScrollbar.reload()`
 to update you sidebar.
 
-# Stopping
+### Stopping
 
 Run `CleverScrollbar.stop()` to disable library. You can load it again later.
