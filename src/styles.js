@@ -3,7 +3,7 @@ const head = document.querySelector('head')
 const styleElement = document.createElement('style')
 
 styleElement.appendChild(document.createTextNode(`
-.clererscroll--container {
+.cleverscroll--container {
     position: fixed;
     right: 0;
     top: 0;
@@ -14,11 +14,11 @@ styleElement.appendChild(document.createTextNode(`
     transition: width .2s ease;
 }
 
-.clererscroll--container:hover {
+.cleverscroll--container:hover {
     width: 100px;
 }
 
-.clererscroll--block {
+.cleverscroll--block {
     width: 10px;
     position: fixed;
     text-align: center;
@@ -36,28 +36,28 @@ styleElement.appendChild(document.createTextNode(`
     transition: width .2s ease;
 }
 
-.clererscroll--container:hover .clererscroll--block {
+.cleverscroll--container:hover .cleverscroll--block {
     color: #444;
     width: 100px;
 }
 
-.clererscroll--block-1 {
+.cleverscroll--block-1 {
     background: rgba(200,0,0,0.5);
 }
 
-.clererscroll--block-2 {
+.cleverscroll--block-2 {
     background: rgba(84, 175, 241, 0.5);
 }
 
-.clererscroll--block-3 {
+.cleverscroll--block-3 {
     background: rgba(126, 234, 124, 0.5);
 }
 
-.clererscroll--block-4 {
+.cleverscroll--block-4 {
     background: rgba(154, 46, 210, 0.5);
 }
 
-.clererscroll--block-5 {
+.cleverscroll--block-5 {
     background: rgba(76, 65, 82, 0.5);
 }
 `))

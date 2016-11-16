@@ -16,16 +16,15 @@ const HTMLRender = new function() {
     this.entered = false
 
     this.container = document.createElement('div')
-    this.container.classList.add('clererscroll--container')
+    this.container.classList.add('cleverscroll--container')
 
     // На мобильных устройствах нам необходимо первый "тык" отфильтровать, так как
     // он лишь позволяет развернуть панельку и не должен перекидывать человека в другое место
     this.container.addEventListener('mouseenter', event => {
         if (this.entered === false) {
-            this.entered = true
-            event.stopPropagation()
-
-            return false
+            setTimeout(() => {
+                this.entered = true
+            }, 10)
         }
     })
 
@@ -82,14 +81,16 @@ const HTMLRender = new function() {
             }
         }
 
-        scroll.classList.add('clererscroll--block')
-        scroll.classList.add(`clererscroll--block-${this.blocks.length+1}`)
+        scroll.classList.add('cleverscroll--block')
+        scroll.classList.add(`cleverscroll--block-${this.blocks.length+1}`)
         scroll.appendChild(document.createTextNode(blockTitle))
 
         this.container.appendChild(scroll)
 
         scroll.addEventListener('click', event => {
-            this.scrollToBlock(block)
+            if (this.entered) {
+                this.scrollToBlock(block)
+            }
         })
 
         this.blocks.push({
