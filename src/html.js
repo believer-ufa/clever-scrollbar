@@ -1,5 +1,6 @@
-import getElementPos from './functions/get-element-position.js'
-import getDocumentHeight from './functions/get-document-height.js'
+import getElementPos from './functions/get-element-position'
+import getDocumentHeight from './functions/get-document-height'
+import './functions/throttle'
 
 /**
  * Класс, который занимается отображением HTML контента скроллбара
@@ -49,6 +50,11 @@ const HTMLRender = new function() {
             }
 
             this.setCoords()
+            this.determineActiveBlock()
+
+            window.addEventListener('scroll', this.determineActiveBlock)
+            window.addEventListener('resize', this.setCoords)
+
         } else {
             console.log('CleverScroll disabled because nothing content blocks')
         }
@@ -64,6 +70,8 @@ const HTMLRender = new function() {
      */
     this.stop = () => {
         document.body.removeChild(this.container)
+        window.removeEventListener('scroll', this.determineActiveBlock)
+        window.removeEventListener('resize', this.setCoords)
     }
 
     /**
@@ -103,7 +111,7 @@ const HTMLRender = new function() {
     /**
      * Установить координаты текущим блокам в соответствии с текущим скроллом
      */
-    this.setCoords = () => {
+    this.setCoordsOriginal = () => {
         const documentHeight = getDocumentHeight()
         let top = 0
 
@@ -128,15 +136,37 @@ const HTMLRender = new function() {
             block.scroll.style.top = `${topPos}%`
             block.scroll.style.height = `${heightPos}%`
 
+            block.originalTop = blockPos.top
+
             top = (topPos + heightPos)
         }
     }
 
+    this.setCoords = this.setCoordsOriginal.throttle(500)
+
     this.scrollToBlock = block => {
         const pos = getElementPos(block)
 
-        window.scrollTo(0, pos.top)
+        document.body.scrollTop = pos.top
     }
+
+    this.determineActiveBlockOriginal = () => {
+        var currentScroll = document.body.scrollTop
+        var currentBlock  = undefined
+        this.blocks.forEach(block => {
+
+            block.scroll.classList.remove('cleverscroll--block-active')
+
+            if (block.originalTop <= currentScroll) {
+                currentBlock = block
+            }
+        })
+
+
+        currentBlock.scroll.classList.add('cleverscroll--block-active')
+    }
+
+    this.determineActiveBlock = this.determineActiveBlockOriginal.throttle(500)
 
 }
 

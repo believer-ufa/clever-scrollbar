@@ -1,7 +1,6 @@
-import './polyfills/nodelist.js'
-import './styles.js'
-//import './css/main.css!'
-import html from './html.js'
+import './polyfills/nodelist'
+import './styles'
+import html from './html'
 
 var load   = html.load
 var reload = html.reload

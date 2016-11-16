@@ -396,6 +396,8 @@
         <script>
             SystemJS.import('src/CleverScrollbar.js').then(function(CleverScrollbar) {
                 CleverScrollbar.load()
+
+                window.CleverScrollbar = CleverScrollbar
             });
         </script>
     </body>
