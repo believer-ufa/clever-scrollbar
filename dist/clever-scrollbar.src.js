@@ -9,14 +9,6 @@ if (typeof Symbol !== 'undefined') {
     HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 }
 
-var head = document.querySelector('head');
-
-var styleElement = document.createElement('style');
-
-styleElement.appendChild(document.createTextNode('\n.cleverscroll--container {\n    position: fixed;\n    right: 0;\n    top: 0;\n    width: 10px;\n    height: 100%;\n    z-index: 1;\n\n    transition: width .2s ease;\n}\n\n.cleverscroll--container:hover {\n    width: 100px;\n}\n\n.cleverscroll--block {\n    width: 10px;\n    position: fixed;\n    text-align: center;\n    font-size: 12px;\n    color: transparent;\n    overflow: hidden;\n    padding: 5px;\n    box-sizing: border-box;\n    cursor: pointer;\n\n    display: flex;\n    align-items: center;\n    justify-content: center;\n\n    transition: width .2s ease;\n}\n\n.cleverscroll--container:hover .cleverscroll--block {\n    color: #444;\n    width: 100px;\n}\n\n.cleverscroll--block-1 {\n    background: rgba(200,0,0,0.5);\n}\n\n.cleverscroll--block-2 {\n    background: rgba(84, 175, 241, 0.5);\n}\n\n.cleverscroll--block-3 {\n    background: rgba(126, 234, 124, 0.5);\n}\n\n.cleverscroll--block-4 {\n    background: rgba(154, 46, 210, 0.5);\n}\n\n.cleverscroll--block-5 {\n    background: rgba(76, 65, 82, 0.5);\n}\n'));
-
-head.appendChild(styleElement);
-
 /**
  * Узнать координаты элемента
  */
@@ -47,6 +39,25 @@ function getDocumentHeight() {
         html = document.documentElement;
 
     return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+}
+
+var stylesLoaded = false;
+
+function loadStyles() {
+
+    if (stylesLoaded) {
+        return;
+    }
+
+    var head = document.querySelector('head');
+
+    var styleElement = document.createElement('style');
+
+    styleElement.appendChild(document.createTextNode('\n    .cleverscroll--container {\n        position: fixed;\n        right: 0;\n        top: 0;\n        width: 10px;\n        height: 100%;\n        z-index: 1;\n\n        transition: width .2s ease;\n    }\n\n    .cleverscroll--container:hover {\n        width: 100px;\n    }\n\n    .cleverscroll--block {\n        width: 10px;\n        position: fixed;\n        text-align: center;\n        font-size: 12px;\n        color: transparent;\n        overflow: hidden;\n        padding: 5px;\n        box-sizing: border-box;\n        cursor: pointer;\n\n        display: flex;\n        align-items: center;\n        justify-content: center;\n\n        transition: width .2s ease;\n    }\n\n    .cleverscroll--container:hover .cleverscroll--block {\n        color: #444;\n        width: 100px;\n    }\n\n    .cleverscroll--block-1 {\n        background: rgba(200,0,0,0.5);\n    }\n\n    .cleverscroll--block-2 {\n        background: rgba(84, 175, 241, 0.5);\n    }\n\n    .cleverscroll--block-3 {\n        background: rgba(126, 234, 124, 0.5);\n    }\n\n    .cleverscroll--block-4 {\n        background: rgba(154, 46, 210, 0.5);\n    }\n\n    .cleverscroll--block-5 {\n        background: rgba(76, 65, 82, 0.5);\n    }\n    '));
+
+    head.appendChild(styleElement);
+
+    stylesLoaded = true;
 }
 
 /**
@@ -124,6 +135,8 @@ var HTMLRender = new function () {
      * Загрузить блоки
      */
     this.load = function () {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
+
         _this.blocks = [];
         _this.container.innerHTML = '';
 
@@ -162,6 +175,10 @@ var HTMLRender = new function () {
 
             window.addEventListener('scroll', _this.determineActiveBlock);
             window.addEventListener('resize', _this.setCoords);
+
+            if (options === undefined || options.loadStyles !== false) {
+                loadStyles();
+            }
         } else {
             console.log('CleverScroll disabled because nothing content blocks');
         }
@@ -308,7 +325,9 @@ var HTMLRender = new function () {
             }
         });
 
-        currentBlock.scroll.classList.add('cleverscroll--block-active');
+        if (currentBlock) {
+            currentBlock.scroll.classList.add('cleverscroll--block-active');
+        }
     };
 
     this.determineActiveBlock = this.determineActiveBlockOriginal.throttle(500);
