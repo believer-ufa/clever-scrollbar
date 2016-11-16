@@ -50,6 +50,45 @@ function getDocumentHeight() {
 }
 
 /**
+ * Source: https://github.com/emn178/js-throttle-debounce/blob/master/src/js-throttle-debounce.js
+ *
+ * Пропускать определённое кол-во вызовов функции для снижения нагрузки на браузер
+ *
+ * @param {int} delay
+ * @param {bool} ignoreLast
+ * @returns {Function}
+ */
+Function.prototype.throttle = function () {
+    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
+    var ignoreLast = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    var func = this;
+    var lastTime = 0;
+    var timer;
+
+    return function () {
+        var self = this,
+            args = arguments;
+        var exec = function exec() {
+            lastTime = new Date();
+            func.apply(self, args);
+        };
+        if (timer) {
+            clearTimeout(timer);
+            timer = null;
+        }
+
+        var diff = new Date() - lastTime;
+
+        if (diff > delay) {
+            exec();
+        } else if (!ignoreLast) {
+            timer = setTimeout(exec, delay - diff);
+        }
+    };
+};
+
+/**
  * Класс, который занимается отображением HTML контента скроллбара
  */
 var HTMLRender = new function () {
@@ -119,6 +158,10 @@ var HTMLRender = new function () {
             }
 
             _this.setCoords();
+            _this.determineActiveBlock();
+
+            window.addEventListener('scroll', _this.determineActiveBlock);
+            window.addEventListener('resize', _this.setCoords);
         } else {
             console.log('CleverScroll disabled because nothing content blocks');
         }
@@ -134,6 +177,8 @@ var HTMLRender = new function () {
      */
     this.stop = function () {
         document.body.removeChild(_this.container);
+        window.removeEventListener('scroll', _this.determineActiveBlock);
+        window.removeEventListener('resize', _this.setCoords);
     };
 
     /**
@@ -194,7 +239,7 @@ var HTMLRender = new function () {
     /**
      * Установить координаты текущим блокам в соответствии с текущим скроллом
      */
-    this.setCoords = function () {
+    this.setCoordsOriginal = function () {
         var documentHeight = getDocumentHeight();
         var top = 0;
 
@@ -223,6 +268,8 @@ var HTMLRender = new function () {
                 block.scroll.style.top = topPos + '%';
                 block.scroll.style.height = heightPos + '%';
 
+                block.originalTop = blockPos.top;
+
                 top = topPos + heightPos;
             }
         } catch (err) {
@@ -241,14 +288,32 @@ var HTMLRender = new function () {
         }
     };
 
+    this.setCoords = this.setCoordsOriginal.throttle(500);
+
     this.scrollToBlock = function (block) {
         var pos = getElementPosition(block);
 
-        window.scrollTo(0, pos.top);
+        document.body.scrollTop = pos.top;
     };
+
+    this.determineActiveBlockOriginal = function () {
+        var currentScroll = document.body.scrollTop;
+        var currentBlock = undefined;
+        _this.blocks.forEach(function (block) {
+
+            block.scroll.classList.remove('cleverscroll--block-active');
+
+            if (block.originalTop <= currentScroll) {
+                currentBlock = block;
+            }
+        });
+
+        currentBlock.scroll.classList.add('cleverscroll--block-active');
+    };
+
+    this.determineActiveBlock = this.determineActiveBlockOriginal.throttle(500);
 }();
 
-//import './css/main.css!'
 var load = HTMLRender.load;
 var reload = HTMLRender.reload;
 var stop = HTMLRender.stop;
