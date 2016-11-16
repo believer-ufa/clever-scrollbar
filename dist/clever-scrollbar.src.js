@@ -13,7 +13,7 @@ var head = document.querySelector('head');
 
 var styleElement = document.createElement('style');
 
-styleElement.appendChild(document.createTextNode('\n.clererscroll--container {\n    position: fixed;\n    right: 0;\n    top: 0;\n    width: 10px;\n    height: 100%;\n    z-index: 1;\n\n    transition: width .2s ease;\n}\n\n.clererscroll--container:hover {\n    width: 100px;\n}\n\n.clererscroll--block {\n    width: 10px;\n    position: fixed;\n    text-align: center;\n    font-size: 12px;\n    color: transparent;\n    overflow: hidden;\n    padding: 5px;\n    box-sizing: border-box;\n    cursor: pointer;\n\n    display: flex;\n    align-items: center;\n    justify-content: center;\n\n    transition: width .2s ease;\n}\n\n.clererscroll--container:hover .clererscroll--block {\n    color: #444;\n    width: 100px;\n}\n\n.clererscroll--block-1 {\n    background: rgba(200,0,0,0.5);\n}\n\n.clererscroll--block-2 {\n    background: rgba(84, 175, 241, 0.5);\n}\n\n.clererscroll--block-3 {\n    background: rgba(126, 234, 124, 0.5);\n}\n\n.clererscroll--block-4 {\n    background: rgba(154, 46, 210, 0.5);\n}\n\n.clererscroll--block-5 {\n    background: rgba(76, 65, 82, 0.5);\n}\n'));
+styleElement.appendChild(document.createTextNode('\n.cleverscroll--container {\n    position: fixed;\n    right: 0;\n    top: 0;\n    width: 10px;\n    height: 100%;\n    z-index: 1;\n\n    transition: width .2s ease;\n}\n\n.cleverscroll--container:hover {\n    width: 100px;\n}\n\n.cleverscroll--block {\n    width: 10px;\n    position: fixed;\n    text-align: center;\n    font-size: 12px;\n    color: transparent;\n    overflow: hidden;\n    padding: 5px;\n    box-sizing: border-box;\n    cursor: pointer;\n\n    display: flex;\n    align-items: center;\n    justify-content: center;\n\n    transition: width .2s ease;\n}\n\n.cleverscroll--container:hover .cleverscroll--block {\n    color: #444;\n    width: 100px;\n}\n\n.cleverscroll--block-1 {\n    background: rgba(200,0,0,0.5);\n}\n\n.cleverscroll--block-2 {\n    background: rgba(84, 175, 241, 0.5);\n}\n\n.cleverscroll--block-3 {\n    background: rgba(126, 234, 124, 0.5);\n}\n\n.cleverscroll--block-4 {\n    background: rgba(154, 46, 210, 0.5);\n}\n\n.cleverscroll--block-5 {\n    background: rgba(76, 65, 82, 0.5);\n}\n'));
 
 head.appendChild(styleElement);
 
@@ -65,16 +65,15 @@ var HTMLRender = new function () {
     this.entered = false;
 
     this.container = document.createElement('div');
-    this.container.classList.add('clererscroll--container');
+    this.container.classList.add('cleverscroll--container');
 
     // На мобильных устройствах нам необходимо первый "тык" отфильтровать, так как
     // он лишь позволяет развернуть панельку и не должен перекидывать человека в другое место
     this.container.addEventListener('mouseenter', function (event) {
         if (_this.entered === false) {
-            _this.entered = true;
-            event.stopPropagation();
-
-            return false;
+            setTimeout(function () {
+                _this.entered = true;
+            }, 10);
         }
     });
 
@@ -173,14 +172,16 @@ var HTMLRender = new function () {
             }
         }
 
-        scroll.classList.add('clererscroll--block');
-        scroll.classList.add('clererscroll--block-' + (_this.blocks.length + 1));
+        scroll.classList.add('cleverscroll--block');
+        scroll.classList.add('cleverscroll--block-' + (_this.blocks.length + 1));
         scroll.appendChild(document.createTextNode(blockTitle));
 
         _this.container.appendChild(scroll);
 
         scroll.addEventListener('click', function (event) {
-            _this.scrollToBlock(block);
+            if (_this.entered) {
+                _this.scrollToBlock(block);
+            }
         });
 
         _this.blocks.push({
